@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3ECE - Projet Hybride eTwinning & Erasmus+ KA210-VET</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --water-dark: #0a4d68;
+            --water-medium: #088395;
+            --water-light: #05bfdb;
+            --water-pale: #00ffca;
+            --sun-yellow: #ffc107;
+            --eco-green: #2ecc71;
+            --white: #ffffff;
+            --dark: #1a1a2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--water-dark) 0%, var(--dark) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-dot:hover, .nav-dot.active {
+            background: var(--water-pale);
+            transform: scale(1.3);
+            border-color: var(--white);
+        }
+
+        /* Slides */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        /* Slide 1 - Accueil */
+        .slide-1 {
+            background: linear-gradient(135deg, var(--water-dark) 0%, #0d2137 50%, var(--dark) 100%);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: var(--water-pale);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 202, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(0, 255, 202, 0); }
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--white);
+            text-shadow: 0 0 60px rgba(0, 255, 202, 0.5);
+            margin-bottom: 20px;
+            letter-spacing: -5px;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: var(--water-light);
+            font-weight: 300;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.4;
+        }
+
+        .info-chips {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .chip {
+            background: linear-gradient(135deg, var(--water-medium), var(--water-dark));
+            padding: 15px 30px;
+            border-radius: 15px;
+            color: var(--white);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .chip:hover {
+            transform: translateY(-5px);
+        }
+
+        .chip-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Water drops animation */
+        .water-drops {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .drop {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--water-pale), var(--water-light));
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0.6;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Slide 2 - Projet Hybride */
+        .slide-2 {
+            background: linear-gradient(180deg, var(--dark) 0%, #0d2137 100%);
+        }
+
+        .hybrid-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            max-width: 1200px;
+        }
+
+        .hybrid-box {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s ease;
+            min-width: 300px;
+        }
+
+        .hybrid-box:hover {
+            transform: scale(1.05);
+            border-color: var(--water-pale);
+            box-shadow: 0 20px 60px rgba(0, 255, 202, 0.2);
+        }
+
+        .hybrid-box img {
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .hybrid-box h3 {
+            color: var(--white);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .hybrid-box p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .plus-sign {
+            font-size: 4rem;
+            color: var(--sun-yellow);
+            font-weight: 800;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .equals-sign {
+            font-size: 4rem;
+            color: var(--eco-green);
+            font-weight: 800;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, var(--eco-green), var(--water-medium));
+        }
+
+        .result-box h3 {
+            font-size: 2rem;
+        }
+
+        /* Slide 3 - Partenaires */
+        .slide-3 {
+            background: linear-gradient(135deg, #0d2137 0%, var(--water-dark) 100%);
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+        }
+
+        .partner-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px 30px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partner-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--water-pale), var(--water-light));
+        }
+
+        .partner-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--water-pale);
+            box-shadow: 0 25px 50px rgba(0, 255, 202, 0.15);
+        }
+
+        .partner-card.coordinator::before {
+            background: linear-gradient(90deg, var(--sun-yellow), #ff9800);
+        }
+
+        .partner-flag {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .partner-name {
+            color: var(--white);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .partner-location {
+            color: var(--water-light);
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .partner-role {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+            color: var(--water-pale);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .partner-card.coordinator .partner-role {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--sun-yellow);
+        }
+
+        /* Slide 4 - Objectifs */
+        .slide-4 {
+            background: linear-gradient(180deg, var(--water-dark) 0%, var(--dark) 100%);
+        }
+
+        .objectives-container {
+            max-width: 1100px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--white);
+            text-align: center;
+            margin-bottom: 60px;
+            text-shadow: 0 0 40px rgba(0, 255, 202, 0.3);
+        }
+
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .objective-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 20px;
+            padding: 35px;
+            border-left: 4px solid var(--water-pale);
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateX(10px);
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+        }
+
+        .objective-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .objective-title {
+            color: var(--water-pale);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .objective-desc {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Slide 5 - Mobilités */
+        .slide-5 {
+            background: linear-gradient(135deg, var(--dark) 0%, #0d2137 100%);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--water-pale), var(--water-medium), var(--water-dark));
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.03);
+            border-color: var(--water-pale);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--water-pale);
+            border-radius: 50%;
+            border: 4px solid var(--dark);
+            z-index: 10;
+        }
+
+        .mobility-type {
+            display: inline-block;
+            background: var(--water-medium);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .mobility-title {
+            color: var(--white);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .mobility-date {
+            color: var(--sun-yellow);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .mobility-details {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Slide 6 - Activités Phase 1 */
+        .slide-6, .slide-7 {
+            background: linear-gradient(180deg, #0d2137 0%, var(--water-dark) 100%);
+        }
+
+        .phase-container {
+            max-width: 1100px;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--eco-green), var(--water-medium));
+            color: var(--white);
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .activity-card {
+            background: rgba(255,255,255,0.06);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .activity-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-5px);
+        }
+
+        .activity-month {
+            color: var(--sun-yellow);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .activity-title {
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .activity-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 10px;
+            margin-right: 5px;
+            margin-top: 8px;
+        }
+
+        .tag-distance {
+            background: rgba(5, 191, 219, 0.2);
+            color: var(--water-light);
+        }
+
+        .tag-mobility {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--eco-green);
+        }
+
+        /* Slide 8 - Budget */
+        .slide-8 {
+            background: linear-gradient(135deg, var(--water-dark) 0%, var(--dark) 100%);
+        }
+
+        .budget-container {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .budget-total {
+            font-family: 'Playfair Display', serif;
+            font-size: 6rem;
+            color: var(--sun-yellow);
+            font-weight: 700;
+            text-shadow: 0 0 50px rgba(255, 193, 7, 0.5);
+            margin-bottom: 50px;
+        }
+
+        .budget-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .budget-item {
+            background: rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 30px 40px;
+            min-width: 200px;
+        }
+
+        .budget-item-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+
+        .budget-item-label {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+
+        .budget-item-percent {
+            color: var(--water-pale);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        /* Slide 9 - Questions */
+        .slide-9 {
+            background: linear-gradient(180deg, var(--dark) 0%, var(--water-dark) 100%);
+        }
+
+        .questions-container {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .questions-icon {
+            font-size: 6rem;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .questions-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--white);
+            margin-bottom: 30px;
+        }
+
+        .questions-subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.3rem;
+            line-height: 1.8;
+        }
+
+        .contact-info {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 30px;
+            border-radius: 15px;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Footer */
+        .slide-footer {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            opacity: 0.6;
+        }
+
+        .slide-footer img {
+            height: 40px;
+            filter: brightness(0) invert(1);
+        }
+
+        .slide-footer span {
+            color: var(--white);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-title { font-size: 5rem; }
+            .hybrid-container { flex-direction: column; gap: 30px; }
+            .partners-grid { grid-template-columns: 1fr; }
+            .objectives-grid { grid-template-columns: 1fr; }
+            .activities-grid { grid-template-columns: 1fr; }
+            .timeline::before { left: 20px; }
+            .timeline-item, .timeline-item:nth-child(odd) { flex-direction: row; justify-content: flex-end; }
+            .timeline-content { width: 85%; }
+            .timeline-dot { left: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 3.5rem; letter-spacing: -2px; }
+            .subtitle { font-size: 1.2rem; }
+            .section-title { font-size: 2.5rem; }
+            .budget-total { font-size: 4rem; }
+            .nav-dots { right: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Dots -->
+    <nav class="nav-dots">
+        <div class="nav-dot active" data-slide="1" title="Accueil"></div>
+        <div class="nav-dot" data-slide="2" title="Projet Hybride"></div>
+        <div class="nav-dot" data-slide="3" title="Partenaires"></div>
+        <div class="nav-dot" data-slide="4" title="Objectifs"></div>
+        <div class="nav-dot" data-slide="5" title="Mobilités"></div>
+        <div class="nav-dot" data-slide="6" title="Phase 1"></div>
+        <div class="nav-dot" data-slide="7" title="Phase 2"></div>
+        <div class="nav-dot" data-slide="8" title="Budget"></div>
+        <div class="nav-dot" data-slide="9" title="Questions"></div>
+    </nav>
+
+    <!-- Slide 1: Accueil -->
+    <section class="slide slide-1" id="slide-1">
+        <div class="water-drops">
+            <div class="drop" style="left: 10%; animation-duration: 8s; animation-delay: 0s;"></div>
+            <div class="drop" style="left: 20%; animation-duration: 6s; animation-delay: 1s;"></div>
+            <div class="drop" style="left: 35%; animation-duration: 9s; animation-delay: 2s;"></div>
+            <div class="drop" style="left: 50%; animation-duration: 7s; animation-delay: 0.5s;"></div>
+            <div class="drop" style="left: 65%; animation-duration: 8s; animation-delay: 3s;"></div>
+            <div class="drop" style="left: 80%; animation-duration: 6s; animation-delay: 1.5s;"></div>
+            <div class="drop" style="left: 90%; animation-duration: 9s; animation-delay: 2.5s;"></div>
+        </div>
+        <div class="hero-content">
+            <div class="badge">
+                🔗 Projet Hybride eTwinning & Erasmus+ KA210-VET
+            </div>
+            <h1 class="main-title">3ECE</h1>
+            <p class="subtitle">Électriciens Européens Éco-responsables<br>et le Cycle de l'Eau</p>
+            <div class="info-chips">
+                <div class="chip">
+                    <span class="chip-icon">📅</span>
+                    <span>20 mois</span>
+                </div>
+                <div class="chip">
+                    <span class="chip-icon">💶</span>
+                    <span>60 000 €</span>
+                </div>
+                <div class="chip">
+                    <span class="chip-icon">🎓</span>
+                    <span>36 élèves</span>
+                </div>
+                <div class="chip">
+                    <span class="chip-icon">🌍</span>
+                    <span>3 pays</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 2: Projet Hybride -->
+    <section class="slide slide-2" id="slide-2">
+        <div class="hybrid-container">
+            <div class="hybrid-box">
+                <img src="https://www.etwinning.fr/fileadmin/user_upload/Images/Logo/logo_etwinning.png" alt="eTwinning" onerror="this.innerHTML='🌐'">
+                <h3>eTwinning</h3>
+                <p>Plateforme de collaboration en ligne<br>Activités à distance<br>TwinSpace partagé</p>
+            </div>
+            <span class="plus-sign">+</span>
+            <div class="hybrid-box">
+                <img src="https://erasmus-plus.ec.europa.eu/sites/default/files/2021-09/logo-ec--en.svg" alt="Erasmus+" onerror="this.innerHTML='🇪🇺'">
+                <h3>Erasmus+ KA210-VET</h3>
+                <p>Financement des mobilités<br>Budget de 60 000 €<br>Reconnaissance européenne</p>
+            </div>
+            <span class="equals-sign">=</span>
+            <div class="hybrid-box result-box">
+                <h3>🔗 Projet Hybride</h3>
+                <p>✅ Plus de visibilité<br>✅ Plus de ressources<br>✅ Partenariat renforcé</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 3: Partenaires -->
+    <section class="slide slide-3" id="slide-3">
+        <div>
+            <h2 class="section-title">Nos 3 Partenaires</h2>
+            <div class="partners-grid">
+                <div class="partner-card coordinator">
+                    <div class="partner-flag">🇫🇷</div>
+                    <div class="partner-name">LPN - Lycée Pablo Neruda</div>
+                    <div class="partner-location">📍 Saint-Martin-d'Hères (Grenoble)</div>
+                    <div class="partner-role">⭐ Coordinateur</div>
+                    <p style="color: rgba(255,255,255,0.6); margin-top: 15px; font-size: 0.9rem;">12 élèves CAP Électricien</p>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-flag">🇷🇴</div>
+                    <div class="partner-name">CTE - Colegiul Tehnic Energetic</div>
+                    <div class="partner-location">📍 Bucarest</div>
+                    <div class="partner-role">Hôte RPT1 & RPT2</div>
+                    <p style="color: rgba(255,255,255,0.6); margin-top: 15px; font-size: 0.9rem;">6 électriciens + 6 élèves Philologie (tutrices)</p>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-flag">🇫🇷</div>
+                    <div class="partner-name">LPV - Lycée Professionnel Vauban</div>
+                    <div class="partner-location">📍 Nice</div>
+                    <div class="partner-role">Hôte AEF1</div>
+                    <p style="color: rgba(255,255,255,0.6); margin-top: 15px; font-size: 0.9rem;">12 élèves CAP/Bac Pro • 1ère participation Erasmus+</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: Objectifs -->
+    <section class="slide slide-4" id="slide-4">
+        <div class="objectives-container">
+            <h2 class="section-title">Objectifs du Projet</h2>
+            <div class="objectives-grid">
+                <div class="objective-card">
+                    <div class="objective-icon">🌱</div>
+                    <div class="objective-title">Compétences Vertes</div>
+                    <div class="objective-desc">Gestion durable de l'eau, énergies renouvelables (photovoltaïque, biogaz), Clean Water Challenge</div>
+                </div>
+                <div class="objective-card">
+                    <div class="objective-icon">🤝</div>
+                    <div class="objective-title">Inclusion & Remotivation</div>
+                    <div class="objective-desc">100% élèves JAMO : boursiers, SEGPA, ULIS, troubles dys, TDAH, QPV. Lutte contre le décrochage.</div>
+                </div>
+                <div class="objective-card">
+                    <div class="objective-icon">⚡</div>
+                    <div class="objective-title">Développement Professionnel</div>
+                    <div class="objective-desc">Câblage industriel, installations photovoltaïques, maintenance armoires de commande, motopompes.</div>
+                </div>
+                <div class="objective-card">
+                    <div class="objective-icon">🗣️</div>
+                    <div class="objective-title">Compétences Linguistiques</div>
+                    <div class="objective-desc">Projet francophone avec 6 élèves Philologie roumaines comme tutrices linguistiques bienveillantes.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Mobilités -->
+    <section class="slide slide-5" id="slide-5">
+        <div>
+            <h2 class="section-title">Calendrier des Mobilités</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="mobility-type">RPT1</span>
+                        <div class="mobility-title">🚀 Lancement à Bucarest</div>
+                        <div class="mobility-date">12-16 octobre 2026</div>
+                        <div class="mobility-details">8 enseignants • Kick-off meeting</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="mobility-type" style="background: var(--eco-green);">AEF1</span>
+                        <div class="mobility-title">🌊 Mobilité MER à Nice</div>
+                        <div class="mobility-date">28 mars - 3 avril 2027</div>
+                        <div class="mobility-details">17 participants • Visite Haliotis 2 (SUEZ)</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="mobility-type" style="background: var(--eco-green);">AEF2</span>
+                        <div class="mobility-title">🏙️ Mobilité VILLE à Bucarest</div>
+                        <div class="mobility-date">10-16 octobre 2027</div>
+                        <div class="mobility-details">16 participants • Visite STEP Glina</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="mobility-type" style="background: var(--eco-green);">AEF3</span>
+                        <div class="mobility-title">🏔️ Mobilité MONTAGNE à Grenoble</div>
+                        <div class="mobility-date">6-12 décembre 2027</div>
+                        <div class="mobility-details">17 participants • Visite Aquapole</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="mobility-type">RPT2</span>
+                        <div class="mobility-title">🏁 Clôture à Bucarest</div>
+                        <div class="mobility-date">24-28 avril 2028</div>
+                        <div class="mobility-details">8 enseignants + 12 élèves CTE</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: Phase 1 -->
+    <section class="slide slide-6" id="slide-6">
+        <div class="phase-container">
+            <div class="phase-badge">📅 PHASE 1 — 2026/2027</div>
+            <h2 class="section-title" style="font-size: 2.5rem; margin-bottom: 40px;">Activités eTwinning & Mobilité MER</h2>
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-month">Septembre 2026</div>
+                    <div class="activity-title">Se présenter en vidéo/audio sur Padlet</div>
+                    <span class="activity-tag tag-distance">[D] Distance</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Octobre 2026</div>
+                    <div class="activity-title">RPT1 Bucarest + Erasmus Days 2026</div>
+                    <span class="activity-tag tag-mobility">[M] Mobilité</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Nov-Déc 2026</div>
+                    <div class="activity-title">Création LOGO + SLOGAN du projet</div>
+                    <span class="activity-tag tag-distance">[D] Distance</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Jan-Fév 2027</div>
+                    <div class="activity-title">Présenter pays/région/ville + Atelier</div>
+                    <span class="activity-tag tag-distance">[D] Distance</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Mars-Avril 2027</div>
+                    <div class="activity-title">AEF1 Nice + Escape Game MER</div>
+                    <span class="activity-tag tag-mobility">[M] Mobilité</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Mai-Juin 2027</div>
+                    <div class="activity-title">Évaluation mi-parcours + Magazine MER</div>
+                    <span class="activity-tag tag-distance">[D] Distance</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 7: Phase 2 -->
+    <section class="slide slide-7" id="slide-7">
+        <div class="phase-container">
+            <div class="phase-badge" style="background: linear-gradient(135deg, var(--sun-yellow), #ff9800);">📅 PHASE 2 — 2027/2028</div>
+            <h2 class="section-title" style="font-size: 2.5rem; margin-bottom: 40px;">Mobilités VILLE & MONTAGNE + Clôture</h2>
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-month">Sept-Oct 2027</div>
+                    <div class="activity-title">AEF2 Bucarest + Erasmus Days 2027</div>
+                    <span class="activity-tag tag-mobility">[M] Mobilité</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Nov-Déc 2027</div>
+                    <div class="activity-title">AEF3 Grenoble + Chef-d'œuvre CAP</div>
+                    <span class="activity-tag tag-mobility">[M] Mobilité</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Jan-Fév 2028</div>
+                    <div class="activity-title">Finalisation Escape Games + Expo</div>
+                    <span class="activity-tag tag-distance">[D] Distance</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Mars 2028</div>
+                    <div class="activity-title">Journée Mondiale de l'Eau + Fiches métiers</div>
+                    <span class="activity-tag tag-distance">[D] Distance</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Avril 2028</div>
+                    <div class="activity-title">RPT2 Bucarest + Remise Europass</div>
+                    <span class="activity-tag tag-mobility">[M] Mobilité</span>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-month">Résultats</div>
+                    <div class="activity-title">3 Escape Games + 3 Magazines + Pompe Solaire</div>
+                    <span class="activity-tag" style="background: rgba(255,193,7,0.2); color: var(--sun-yellow);">🏆 Livrables</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 8: Budget -->
+    <section class="slide slide-8" id="slide-8">
+        <div class="budget-container">
+            <h2 class="section-title">Budget Total</h2>
+            <div class="budget-total">60 000 €</div>
+            <div class="budget-breakdown">
+                <div class="budget-item">
+                    <div class="budget-item-value">6 998 €</div>
+                    <div class="budget-item-label">Gestion & Mise en œuvre</div>
+                    <div class="budget-item-percent">11,7%</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-item-value">16 338 €</div>
+                    <div class="budget-item-label">Transport</div>
+                    <div class="budget-item-percent">27,2%</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-item-value">36 664 €</div>
+                    <div class="budget-item-label">Séjour</div>
+                    <div class="budget-item-percent">61,1%</div>
+                </div>
+            </div>
+            <div style="margin-top: 50px; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                <div class="chip" style="background: rgba(255,255,255,0.1);">
+                    <span>🚂 Train écoresponsable LPN-LPV</span>
+                </div>
+                <div class="chip" style="background: rgba(255,255,255,0.1);">
+                    <span>✈️ Avion FR-RO uniquement</span>
+                </div>
+                <div class="chip" style="background: rgba(255,255,255,0.1);">
+                    <span>🌿 Green Deal respecté</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 9: Questions -->
+    <section class="slide slide-9" id="slide-9">
+        <div class="questions-container">
+            <div class="questions-icon">💬</div>
+            <h2 class="questions-title">Questions ?</h2>
+            <p class="questions-subtitle">
+                Merci pour votre attention !<br>
+                Avez-vous des questions ou des remarques ?
+            </p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📧</span>
+                    <span>Mustapha.Nour@ac-grenoble.fr</span>
+                </div>
+                <div class="contact-item">
+                    <span>📱</span>
+                    <span>Groupe WhatsApp « 3ECE »</span>
+                </div>
+            </div>
+            <div style="margin-top: 50px;">
+                <div class="chip" style="background: linear-gradient(135deg, var(--eco-green), var(--water-medium));">
+                    <span>📅 Date limite candidature : 5 mars 2026 à 12h</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Navigation dots
+        const dots = document.querySelectorAll('.nav-dot');
+        const slides = document.querySelectorAll('.slide');
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const slideNum = dot.getAttribute('data-slide');
+                document.getElementById(`slide-${slideNum}`).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Update active dot on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideNum = entry.target.id.split('-')[1];
+                    dots.forEach(d => d.classList.remove('active'));
+                    document.querySelector(`.nav-dot[data-slide="${slideNum}"]`).classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSlide = Array.from(dots).findIndex(d => d.classList.contains('active')) + 1;
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                if (currentSlide < slides.length) {
+                    document.getElementById(`slide-${currentSlide + 1}`).scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (currentSlide > 1) {
+                    document.getElementById(`slide-${currentSlide - 1}`).scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
